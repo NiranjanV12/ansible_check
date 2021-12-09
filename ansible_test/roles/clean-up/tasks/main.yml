@@ -1,0 +1,8 @@
+---
+# tasks file for clean-up
+
+- name: Notify handler
+  ansible.builtin.debug: msg="Notify Handler"
+  changed_when: true
+  notify:
+    - write file

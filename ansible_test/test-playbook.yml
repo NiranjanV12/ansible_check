@@ -1,0 +1,9 @@
+---
+- hosts: "{{ curr_host }}"
+  become: yes
+  gather_facts: yes
+  roles:
+    - heartbeat
+    - recover
+    - clean-up        
+# post_tasks:    

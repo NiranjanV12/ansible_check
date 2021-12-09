@@ -1,0 +1,8 @@
+---
+# handlers file for heartbeat-recover
+- name: write file
+  copy:
+    content: '{ "v_service_status" : "{{ v_service_status }}", "v_delete_reboot" : {{ v_delete_reboot  }} }'
+    dest: /home/ubuntu/vault_ansible/output.json
+  delegate_to: 127.0.0.1
+

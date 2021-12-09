@@ -1,0 +1,65 @@
+---
+# tasks file for recover
+
+- name: Print var
+  ansible.builtin.debug:
+     var: v_service_status
+- name: start process
+  block:
+    - name: debug
+      ansible.builtin.debug: msg="inside"
+    
+    - name: find files
+      find:
+       paths: "{{ item }}"
+       patterns: "*.log"
+      with_items: 
+       - "/home/ubuntu/testdir/"
+       - "/home/ubuntu/testdir2/" 
+      register: result
+
+
+    - name: Print var
+      ansible.builtin.debug:
+       var: item.path
+      with_items: >
+            {{ result.results.0.files }}, {{ result.results.1.files }}
+      when: false
+
+    - name: delete files
+      file:
+       path: "{{ item.path }}"
+       state: absent
+      with_items: >
+            {{ result.results.0.files }}, {{ result.results.1.files }}
+
+
+    - name: Unconditionally reboot the machine
+      reboot:   
+         post_reboot_delay: 120
+         test_command: /opt/kafka/bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092  --list
+#      when: false      
+
+#    - name: check fail
+#      fail:
+#       msg: Explicitly FAILED.
+
+    - name: Set fact
+      set_fact:
+        v_delete_reboot: true
+
+  when: v_service_status == 'stopped'        
+
+  rescue: 
+   - name: Rescue Notify
+     ansible.builtin.debug: msg="Rescue Notify"
+     changed_when: true
+     notify:
+       - write file
+         
+   - name: Flush handlers
+     meta: flush_handlers
+
+   - name: Rethrow
+     fail:
+       msg: Explicitly FAILED.

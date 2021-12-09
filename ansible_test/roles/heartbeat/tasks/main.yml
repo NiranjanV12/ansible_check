@@ -1,0 +1,33 @@
+---
+# tasks file for heartbeat-recover
+- name: heartbeat
+  block:
+    - name: Populate service facts
+      ansible.builtin.service_facts:
+
+    - name: Services
+      ansible.builtin.debug:
+         var: ansible_facts.services["dmesg.service"].state
+    - name: Set flag
+      set_fact:
+         v_service_status: "{{ ansible_facts.services[\"dmesg.service\"].state }}"  
+    - name: Print var
+      ansible.builtin.debug:
+         var: v_service_status
+#    - name: check
+#      fail:
+#       msg: Explicitly check.     
+  
+  rescue: 
+   - name: Rescue Notify
+     ansible.builtin.debug: msg="Rescue Notify"
+     changed_when: true
+     notify:
+       - write file
+         
+   - name: Flush handlers
+     meta: flush_handlers
+
+   - name: Rethrow
+     fail:
+       msg: Explicitly FAILED.
