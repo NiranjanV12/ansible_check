@@ -1,1 +1,1 @@
-{"v_service_status": "stopped", "v_delete_reboot": false}
+{ "v_service_status" : "stopped", "kp_root_space" : 18G, "v_delete_reboot" : True, "v_services_up": False  }

@@ -8,7 +8,17 @@
   block:
     - name: debug
       ansible.builtin.debug: msg="inside"
-    
+
+    - name: Stop service uuidd
+      ansible.builtin.service:
+       name: uuidd
+       state: stopped
+
+    - name: Stop service uuidd
+      ansible.builtin.service:
+       name: uuidd
+       state: stopped   
+
     - name: find files
       find:
        paths: "{{ item }}"
@@ -36,8 +46,8 @@
 
     - name: Unconditionally reboot the machine
       reboot:   
-         post_reboot_delay: 120
-         test_command: /opt/kafka/bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092  --list
+         post_reboot_delay: 60
+#         test_command: /opt/kafka/bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092  --list
 #      when: false      
 
 #    - name: check fail
@@ -48,7 +58,29 @@
       set_fact:
         v_delete_reboot: true
 
-  when: v_service_status == 'stopped'        
+    - name: Start service uuidd
+      ansible.builtin.service:
+       name: uuidd
+       state: started
+
+    - name: Start service uuidd
+      ansible.builtin.service:
+       name: uuidd
+       state: started    
+     
+    - name: Retry a task until a certain condition is met
+      shell: "sudo lsof -i -P -n | grep LISTEN | grep 9092"
+      register: result
+      until: result.stdout != ""
+      retries: 5
+      delay: 10   
+
+
+    - name: Set fact
+      set_fact:
+        v_services_up: true
+
+  when: v_service_status == 'stopped' or kp_root_space.stdout | regex_replace('[G,M,K,B]') | int  < 50       
 
   rescue: 
    - name: Rescue Notify

@@ -11,9 +11,19 @@
     - name: Set flag
       set_fact:
          v_service_status: "{{ ansible_facts.services[\"dmesg.service\"].state }}"  
+
     - name: Print var
       ansible.builtin.debug:
          var: v_service_status
+
+    - name: get root space
+      shell: df -h | grep -w "20G" | awk '{print $4}'
+      register: kp_root_space
+
+    - name: Print var
+      debug:
+       var: kp_root_space
+
 #    - name: check
 #      fail:
 #       msg: Explicitly check.     
