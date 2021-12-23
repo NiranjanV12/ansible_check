@@ -6,4 +6,5 @@
     - heartbeat
     - recover
     - clean-up        
+    - heartbeat
 # post_tasks:    

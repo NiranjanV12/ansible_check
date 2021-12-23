@@ -3,6 +3,6 @@
 - name: write file
   copy:
     content: '{ "v_service_status" : "{{ v_service_status }}", "kp_root_space" : {{ kp_root_space.stdout }}, "v_delete_reboot" : {{ v_delete_reboot  }}, "v_services_up": {{ v_services_up }}  }'
-    dest: /home/ubuntu/ansible_git/ansible_test/output.json
+    dest: qwert.json #/home/ubuntu/ansible_git/ansible_test/output.json
   delegate_to: 127.0.0.1
 
