@@ -4,20 +4,25 @@
 - name: Print var
   ansible.builtin.debug:
      var: v_service_status
+  tags: s1
+
 - name: start process
   block:
     - name: debug
       ansible.builtin.debug: msg="inside"
+      tags: s1
 
     - name: Stop service uuidd
       ansible.builtin.service:
        name: uuidd
        state: stopped
+      tags: s1
 
     - name: Stop service uuidd
       ansible.builtin.service:
        name: uuidd
        state: stopped   
+      tags: s1
 
     - name: find files
       find:
@@ -27,6 +32,7 @@
        - "/home/ubuntu/testdir/"
        - "/home/ubuntu/testdir2/" 
       register: result
+      tags: s1
 
 #    - name: Print var
 #      ansible.builtin.debug:
@@ -41,6 +47,7 @@
        state: absent
       with_items: >
             {{ result.results.0.files }}, {{ result.results.1.files }}
+      tags: s1
 
 
     - name: Unconditionally reboot the machine
@@ -48,6 +55,7 @@
          post_reboot_delay: 60
 #         test_command: /opt/kafka/bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092  --list
 #      when: false      
+      tags: s2
 
 #    - name: check fail
 #      fail:
@@ -56,28 +64,32 @@
     - name: Set fact
       set_fact:
         v_delete_reboot: true
+      tags: s2
 
     - name: Start service uuidd
       ansible.builtin.service:
        name: uuidd
        state: started
+      tags: s1
 
     - name: Start service uuidd
       ansible.builtin.service:
        name: uuidd
        state: started    
-     
+      tags: s1
+
     - name: Retry a task until a certain condition is met
-      shell: "sudo lsof -i -P -n | grep LISTEN" # | grep 9092"
+      shell: "sudo lsof -i -P -n | grep LISTEN | grep 9092"
       register: result
       until: result.stdout != ""
       retries: 5
       delay: 10   
-
+      tags: s1
 
     - name: Set fact
       set_fact:
         v_services_up: true
+      tags: s1
 
   when: v_service_status == 'stopped' or kp_root_space.stdout | regex_replace('[G,M,K,B]') | int  < 50       
 

@@ -1,0 +1,24 @@
+---
+# tasks file for gitTest
+
+
+- name: Delete git content & directory
+  file:
+    state: absent
+    path: /home/ubuntu/gitdir
+
+- name: clone of a single branch "{{ git_branch }}"
+  ansible.builtin.git:
+    repo: https://github.com/NiranjanV12/test116534.git
+    dest: /home/ubuntu/gitdir
+    single_branch: yes
+    version: "{{ git_branch }}"
+
+
+- name: rsync content to without .git
+  synchronize:
+    src: /home/ubuntu/gitdir/
+    dest: /home/ubuntu/gitdir2/
+    rsync_opts:
+      - "--exclude=.git"
+  delegate_to: "{{ curr_host }}"      

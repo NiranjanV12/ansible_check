@@ -3,8 +3,11 @@
   become: yes
   gather_facts: yes
   roles:
-    - heartbeat
-    - recover
-    - clean-up        
-    - heartbeat
+    - role: heartbeat
+      tags: s1
+    - role: recover
+    - role: clean-up        
+      tags: s1
+    - role: heartbeat
+      tags: s1
 # post_tasks:    
