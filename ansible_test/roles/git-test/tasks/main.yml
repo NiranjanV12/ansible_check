@@ -1,7 +1,6 @@
 ---
 # tasks file for gitTest
 
-
 - name: Delete git content & directory
   file:
     state: absent
@@ -14,11 +13,10 @@
     single_branch: yes
     version: "{{ git_branch }}"
 
-
 - name: rsync content to without .git
   synchronize:
     src: /home/ubuntu/gitdir/
     dest: /home/ubuntu/gitdir2/
     rsync_opts:
       - "--exclude=.git"
-  delegate_to: "{{ curr_host }}"      
+  delegate_to: "{{ v_ansible_host }}"        

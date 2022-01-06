@@ -1,6 +1,7 @@
 ---
 - hosts: "{{ curr_host }}"
   become: yes
+  #remote_user: user1
   gather_facts: yes
   roles:
     - role: git-test

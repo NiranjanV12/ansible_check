@@ -1,0 +1,4 @@
+[host-vm-ansible]
+10.96.229.177  v_ansible_host=10.96.229.177 ansible_ssh_user=user1
+[localhost]
+localhost ansible_connection=local
