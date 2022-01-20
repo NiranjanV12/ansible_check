@@ -1,0 +1,23 @@
+---
+
+- name: test
+  gather_facts: false
+  become: true
+  hosts: localhost
+  tasks:
+
+#    - name: Display the config
+#      debug:
+#        msg: "The hostname is aaaaaaaaaaaa"
+
+     - shell: df -h | grep -w "/dev/sda1" | awk '{print $4}'
+       register: var_1
+         
+     - name: Print var
+       ansible.builtin.debug:
+               var: var_1.stdout
+                             
+     - name: Make sure a service unit is running
+       ansible.builtin.systemd:
+        state: started
+        name:  MyService        
