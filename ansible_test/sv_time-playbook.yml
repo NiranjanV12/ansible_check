@@ -1,0 +1,8 @@
+---
+- hosts: "{{ curr_host }}"
+  become: yes
+  #remote_user: user1
+  gather_facts: yes
+  roles:
+    - role: sv-time
+# post_tasks:    

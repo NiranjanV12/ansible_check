@@ -1,0 +1,11 @@
+---
+# tasks file for sv_time
+
+- name: get new boot times
+  shell: journalctl --list-boots | awk '/{{ last_hash }}/,0' | grep -v '{{ last_hash }}' > /home/ubuntu/new.txt
+
+- name: fetch file
+  ansible.builtin.fetch:
+    src: /home/ubuntu/new.txt
+    dest: /home/ubuntu/sv_time/fetchedFiles/{{ v_ansible_host_name }}.txt
+    flat: yes
