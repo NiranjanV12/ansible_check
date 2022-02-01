@@ -1,8 +1,9 @@
 [host-vm-ansible]
-10.96.229.177  v_ansible_host=10.96.229.177 v_ansible_host_name=host-vm-ansible ansible_ssh_user=user1
+10.96.229.177  v_ansible_host=10.96.229.177 v_ansible_host_name=host-vm-ansible last_hash=a90d00b160414c6ca2c9f0ecfac8b1b5 ansible_ssh_user=user1
 
-:wq
+[ELK-vm]
+10.96.229.134  v_ansible_host=10.96.229.134 v_ansible_host_name=ELK-vm last_hash=da99b61b568045498ec328fb3e637e7e
 
 
 [localhost]
-localhost ansible_connection=local
+localhost ansible_connection=local v_ansible_host=localhost v_ansible_host_name=localhost last_hash=aa548dd9fb944a919af72c1342ddfc5b
