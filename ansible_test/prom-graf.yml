@@ -1,0 +1,8 @@
+---
+- hosts: "{{ curr_host }}"
+  become: yes
+  roles:
+    - role: install-prometheus
+#      tags: s1
+    - role: install-grafana    
+# post_tasks:    

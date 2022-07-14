@@ -1,0 +1,14 @@
+[Unit]
+Description=Prometheus service
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=root
+Group=root
+Type=simple
+ExecStart=/home/ubuntu/prometheus22/prometheus-2.36.2.linux-amd64/prometheus  --storage.tsdb.retention=1y --config.file=/home/ubuntu/prometheus22/prometheus-2.36.2.linux-amd64/prometheus.yml
+
+[Install]
+WantedBy=multi-user.target
+

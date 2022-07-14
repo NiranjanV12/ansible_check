@@ -1,0 +1,45 @@
+---  
+- name: Create a directory if it does not exist
+  ansible.builtin.file:
+    path: /home/ubuntu/prometheus22
+    state: directory
+    mode: 0755
+#  when: false   
+
+- name: Download and Unarchive prometheus binary
+  ansible.builtin.unarchive:
+    src: https://github.com/prometheus/prometheus/releases/download/v2.36.2/prometheus-2.36.2.linux-amd64.tar.gz
+    dest: /home/ubuntu/prometheus22
+    remote_src: yes
+#  when: false  
+
+- name: backup prometheus.yml
+  ansible.builtin.copy:
+    src: /home/ubuntu/prometheus22/prometheus-2.36.2.linux-amd64/prometheus.yml
+    dest: /home/ubuntu/bk_prometheus.yml_{{ ansible_facts.date_time.date }}_{{ ansible_facts.date_time.hour }}_{{ ansible_facts.date_time.minute }}_{{ ansible_facts.date_time.second }}
+    remote_src: yes
+#  when: false  
+
+- name: update prometheus.yml
+  template:
+      src: "prometheus.yml.j2"
+      dest: "/home/ubuntu/prometheus22/prometheus-2.36.2.linux-amd64/prometheus.yml"
+      mode: 0644
+
+- name: prometheus service file
+  ansible.builtin.copy:
+    src: prometheus-svc.service
+    dest: /etc/systemd/system/prometheus-svc.service
+    mode: 0644
+    owner: root
+    group: root
+
+- name: prometheus as service
+  ansible.builtin.systemd:
+    name: prometheus-svc
+    daemon_reload: yes
+    enabled: yes
+    state: restarted
+
+
+  
