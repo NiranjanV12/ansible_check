@@ -7,7 +7,7 @@ After=network-online.target
 User=root
 Group=root
 Type=simple
-ExecStart=/home/ubuntu/prometheus22/prometheus-2.36.2.linux-amd64/prometheus  --storage.tsdb.retention=1y --config.file=/home/ubuntu/prometheus22/prometheus-2.36.2.linux-amd64/prometheus.yml
+ExecStart=/home/ubuntu/prometheus22/prometheus-2.36.2.linux-amd64/prometheus  --storage.tsdb.retention.time=1y --config.file=/home/ubuntu/prometheus22/prometheus-2.36.2.linux-amd64/prometheus.yml
 
 [Install]
 WantedBy=multi-user.target

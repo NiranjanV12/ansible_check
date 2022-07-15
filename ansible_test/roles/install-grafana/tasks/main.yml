@@ -13,15 +13,21 @@
     filename: grafana.list
     state: present
 
-- name: Install grafana
+- name: Install dependencies
   ansible.builtin.apt:
     update_cache: true
     name: 
      - apt-transport-https
      - software-properties-common 
      - wget
-     - grafana 
     state: present
+
+- name: Install grafana
+  ansible.builtin.apt:
+    name: 
+     - grafana=9.0.2
+    state: present
+
 
 - name: grafana-server as service
   ansible.builtin.systemd:
@@ -29,3 +35,41 @@
     daemon_reload: yes
     enabled: yes
     state: restarted    
+
+- name: copy datasource config file
+  ansible.builtin.copy:
+    src: datasource-conf-1.yml
+    dest: /etc/grafana/provisioning/datasources/datasource-conf-1.yml
+    mode: 0640
+    owner: root
+    group: grafana
+
+- name: copy dashboard config file
+  ansible.builtin.copy:
+    src: dashboard-conf-1.yml
+    dest: /etc/grafana/provisioning/dashboards/dashboard-conf-1.yml
+    mode: 0640
+    owner: root
+    group: grafana
+
+- name: Create a directory if it does not exist
+  ansible.builtin.file:
+    path: /var/lib/grafana/dashboards
+    state: directory
+    mode: 0755
+
+- name: copy node-exporter config file
+  ansible.builtin.copy:
+    src: vm-details.json
+    dest: /var/lib/grafana/dashboards/vm-details.json
+    mode: 0644
+    owner: root
+    group: grafana   
+
+- name: grafana-server as service
+  ansible.builtin.systemd:
+    name: grafana-server
+    state: restarted  
+
+
+

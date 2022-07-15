@@ -10,7 +10,7 @@ localhost ansible_connection=local v_ansible_host=localhost v_ansible_host_name=
 
 
 [prom-graf-main]
-10.96.229.175
+10.96.229.15
 
 [node-1]
 10.96.229.160
@@ -25,6 +25,10 @@ prom-graf-main
 [prom-node-exporter:children]
 node-1 ## issue change any other to node-1 ABOVE and execute with host prom-node-exporter... it will consider ABOVE node-1...even though prom-node-exporter was mentoined
 node-2
+
+
+###grafana version lock
+###grafana dashboard config
 
 
 ### transfer ssh keys
